@@ -1,0 +1,152 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>TSC Pro API — Demo & Docs</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:system-ui,sans-serif;background:#0f172a;color:#e2e8f0;padding:20px;min-height:100vh}
+  h1{color:#2dd4bf;font-size:1.8rem;margin-bottom:8px}
+  h2{color:#94a3b8;font-size:1.1rem;margin:24px 0 8px}
+  .card{background:#1e293b;border:1px solid #334155;border-radius:12px;padding:20px;margin-bottom:16px}
+  .badge{display:inline-block;background:#0d9488;color:#fff;font-size:11px;padding:2px 10px;border-radius:20px;margin-left:8px;vertical-align:middle}
+  label{display:block;font-size:13px;color:#94a3b8;margin-bottom:4px}
+  input,select,textarea{width:100%;background:#0f172a;border:1px solid #334155;color:#e2e8f0;border-radius:8px;padding:8px 12px;font-size:14px;margin-bottom:12px}
+  textarea{min-height:120px;font-family:monospace;resize:vertical}
+  button{background:#0d9488;color:#fff;border:none;border-radius:8px;padding:10px 24px;font-size:14px;cursor:pointer;font-weight:600}
+  button:hover{background:#0f766e}
+  pre{background:#020617;border:1px solid #1e293b;border-radius:8px;padding:16px;overflow-x:auto;font-size:13px;color:#7dd3fc;white-space:pre-wrap;word-break:break-all}
+  .key-row{background:#0f172a;border-radius:8px;padding:10px 14px;margin-bottom:8px;font-family:monospace;font-size:13px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px}
+  .key-val{color:#2dd4bf;font-weight:bold;letter-spacing:1px}
+  .owner{color:#94a3b8;font-size:12px}
+  .copy-btn{background:#1e293b;border:1px solid #334155;color:#94a3b8;padding:4px 12px;border-radius:6px;font-size:12px;cursor:pointer}
+  .copy-btn:hover{background:#334155;color:#fff}
+  .error{color:#f87171}
+  .success{color:#4ade80}
+  table{width:100%;border-collapse:collapse;font-size:13px}
+  th{text-align:left;padding:8px 12px;background:#0f172a;color:#94a3b8;border-bottom:1px solid #334155}
+  td{padding:8px 12px;border-bottom:1px solid #1e293b}
+  code{background:#0f172a;padding:2px 6px;border-radius:4px;font-family:monospace;font-size:13px;color:#7dd3fc}
+</style>
+</head>
+<body>
+
+<h1>TSC Pro API <span class="badge">v1.0</span></h1>
+<p style="color:#64748b;margin-bottom:24px">JavaScript SDK — kisi bhi website ya AI mein use karo</p>
+
+<!-- API KEYS -->
+<div class="card">
+  <h2>🔑 Aapki API Keys</h2>
+  <div class="key-row">
+    <div><div class="key-val">TSC-WEB1-2024-A7X3</div><div class="owner">Website 1</div></div>
+    <button class="copy-btn" onclick="navigator.clipboard.writeText('TSC-WEB1-2024-A7X3');this.innerText='Copied!'">Copy</button>
+  </div>
+  <div class="key-row">
+    <div><div class="key-val">TSC-AI01-2024-B9K2</div><div class="owner">AI / Chatbot</div></div>
+    <button class="copy-btn" onclick="navigator.clipboard.writeText('TSC-AI01-2024-B9K2');this.innerText='Copied!'">Copy</button>
+  </div>
+  <div class="key-row">
+    <div><div class="key-val">TSC-DEV1-2024-C4M8</div><div class="owner">Developer / Testing</div></div>
+    <button class="copy-btn" onclick="navigator.clipboard.writeText('TSC-DEV1-2024-C4M8');this.innerText='Copied!'">Copy</button>
+  </div>
+</div>
+
+<!-- LIVE TEST -->
+<div class="card">
+  <h2>🧪 Live Test</h2>
+  <label>API Key</label>
+  <input id="apiKeyInput" value="TSC-WEB1-2024-A7X3" placeholder="TSC-WEB1-2024-A7X3">
+  <label>Commission Rate (optional)</label>
+  <input id="rateInput" value="90/10" placeholder="90/10">
+  <label>Input Text (WhatsApp ya plain format)</label>
+  <textarea id="textInput">10 20 30 (5) fb
+45 50 (10) pd
+11 22 33 (3) gb</textarea>
+  <button onclick="runTest()">▶ Calculate</button>
+  <h2>Result</h2>
+  <pre id="resultBox">// Result yahan aayega...</pre>
+</div>
+
+<!-- HOW TO USE -->
+<div class="card">
+  <h2>📋 Kaise Use Karein</h2>
+  <h2 style="color:#2dd4bf;font-size:.9rem;margin-top:12px">Step 1: Script tag add karo</h2>
+  <pre>&lt;script src="https://shivamkumarrj15-sudo.github.io/tsc-manager/tsc-sdk.js"&gt;&lt;/script&gt;</pre>
+  <h2 style="color:#2dd4bf;font-size:.9rem">Step 2: Calculate karo</h2>
+  <pre>const result = TSCProAPI.calculate(
+  "10 20 30 (5) fb\n45 50 (10) pd",
+  { apiKey: "TSC-WEB1-2024-A7X3" }
+);
+console.log(result);</pre>
+  <h2 style="color:#2dd4bf;font-size:.9rem">Custom rate ke saath:</h2>
+  <pre>const result = TSCProAPI.calculate(text, {
+  apiKey: "TSC-WEB1-2024-A7X3",
+  rate: "93/7"
+});</pre>
+</div>
+
+<!-- RESPONSE FORMAT -->
+<div class="card">
+  <h2>📦 Response Format</h2>
+  <pre>{
+  "success": true,
+  "rateUsed": "90/10",
+  "grandTotal": 750,
+  "grandPassing": 675,
+  "grandDebit": 675,
+  "grandCredit": 675,
+  "netBalance": 0,
+  "breakdown": {
+    "FB": { "total": 150, "passing": 135, "debit": 135, "credit": 135, "jodiCount": 3, "harufCount": 0 },
+    "PD": { "total": 450, "passing": 405, "debit": 405, "credit": 405, "jodiCount": 2, "harufCount": 0 }
+  },
+  "apiOwner": "Website 1",
+  "timestamp": "2026-09-13T14:00:00.000Z"
+}</pre>
+</div>
+
+<!-- METHODS -->
+<div class="card">
+  <h2>🔧 Available Methods</h2>
+  <table>
+    <tr><th>Method</th><th>Description</th></tr>
+    <tr><td><code>TSCProAPI.calculate(text, options)</code></td><td>Main calculation — text parse karo</td></tr>
+    <tr><td><code>TSCProAPI.verifyKey(apiKey)</code></td><td>API key valid hai ya nahi check karo</td></tr>
+    <tr><td><code>TSCProAPI.info()</code></td><td>SDK version aur website info</td></tr>
+  </table>
+</div>
+
+<!-- ERRORS -->
+<div class="card">
+  <h2>⚠️ Error Codes</h2>
+  <table>
+    <tr><th>Code</th><th>Matlab</th></tr>
+    <tr><td><code>401</code></td><td>API key provide nahi ki</td></tr>
+    <tr><td><code>403</code></td><td>Invalid ya inactive API key</td></tr>
+    <tr><td><code>429</code></td><td>Rate limit exceed (100 req/min)</td></tr>
+    <tr><td><code>400</code></td><td>Input text missing</td></tr>
+    <tr><td><code>413</code></td><td>Input bahut bada (max 50,000 chars)</td></tr>
+    <tr><td><code>500</code></td><td>Internal error</td></tr>
+  </table>
+</div>
+
+<script src="tsc-sdk.js"></script>
+<script>
+function runTest() {
+  const key  = document.getElementById('apiKeyInput').value.trim();
+  const rate = document.getElementById('rateInput').value.trim();
+  const text = document.getElementById('textInput').value;
+  const box  = document.getElementById('resultBox');
+  try {
+    const result = TSCProAPI.calculate(text, { apiKey: key, rate: rate || undefined });
+    box.textContent = JSON.stringify(result, null, 2);
+    box.style.color = result.success ? '#4ade80' : '#f87171';
+  } catch(e) {
+    box.textContent = 'Error: ' + e.message;
+    box.style.color = '#f87171';
+  }
+}
+</script>
+</body>
+</html>
